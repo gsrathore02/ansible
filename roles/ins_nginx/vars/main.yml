@@ -1,0 +1,4 @@
+nginx_package:
+  - nginx
+    #ansible_user: 
+    #  - root

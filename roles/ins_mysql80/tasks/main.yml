@@ -1,0 +1,65 @@
+- name: mysql80 is installed
+  #  task:
+  apt:
+    name: "{{ mysql80_package }}"
+    state: present
+    #   tags: install_mysql80
+
+- name: mysql80 is running and enabled
+  service:
+    name: mysql
+    state: restarted
+    enabled: yes
+
+- name: install pip3
+  apt: name=python3-pip state=present
+
+- name: Make sure pymysql is present
+  become: true # needed if the other tasks are not played as root
+  pip:
+    name: pymysql
+    state: present
+
+#- name: Create .my.cnf
+#  template:
+#    src: "templates/my.cnf"
+#    dest: "/root/.my.cnf"
+
+- name: Update mysql root password for all root accounts
+  mysql_user:
+    name: root
+    host_all: true
+    password: '{{ mysql_root_password }}'
+    check_implicit_admin: true
+    priv: '*.*:ALL,GRANT'
+    login_user: '{{ mysql_root_username }}'
+    login_password: '{{ mysql_root_password }}'
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    #  no_log: true
+  tags:
+  - molecule-idempotence-notest
+
+- name: create a new database
+  mysql_db: name="{{project}}" state=present login_user="{{ mysql_root_username }}" login_password="{{ mysql_root_password }}"
+
+- name: Create MySQL User
+  mysql_user:
+    name: "{{ project }}"
+    password: "{{ mysql_password }}"
+    login_user: "{{ mysql_root_username }}"
+    login_password: "{{ mysql_root_password }}"
+    host: localhost
+    priv: " {{ project }}.{{mysql_username}}:ALL"
+    state: present
+
+- name: Restart mysql
+  service:
+    name: mysql
+    state: restarted
+
+    #- name: Create database user with name 'bob' and password '12345' with all database privileges
+    #  community.mysql.mysql_user:
+    #    name: bob
+    #    password: 12345
+    #    priv: '*.*:ALL'
+    #    state: present    

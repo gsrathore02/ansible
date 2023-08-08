@@ -1,0 +1,23 @@
+mysql80_package:
+- mysql-server
+
+#mysql_root_password: root@123  
+mysql_databases:
+- name: gulab
+
+mysql_host: localhost
+mysql_database: gulab
+mysql_root_username: root
+mysql_root_password: root@123
+mysql_username: gulab
+mysql_password: gulab@321
+
+#mysql_users:
+#- name: gulab
+#  host: "%"
+#  mysql_database: gulab
+#  mysql_root_user: root
+  #  mysql_root_password: root@123
+  #  mysql_user: gulab
+  #  mysql_passwd: gulab@321
+  #  priv: "gulab.*:ALL"

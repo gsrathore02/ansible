@@ -1,0 +1,40 @@
+---
+- name: Install dependecies
+  apt:
+    pkg:
+      - apt-transport-https
+      - lsb-release
+      - ca-certificates
+      - gpg
+
+- name: Distribution specific install
+  include_tasks: "install_{{ ansible_distribution }}.yml"
+
+- name: Install common php extensions
+  apt:
+    pkg: "{{ item }}"
+  loop: "{{ php_common }}"
+
+- name: delete www.conf file
+  file:
+    path: /etc/php/7.4/fpm/pool.d/www.conf
+    state: absent
+      #    notify: restart nginx
+
+- name: copy www.conf
+  template:
+    src: templates/www.conf.j2
+    dest: /etc/php/7.4/fpm/pool.d/{{ project }}.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart php7.4-fpm
+
+- name: "restart nginx"
+  service:
+    name: php7.4-fpm
+    state: restarted
+
+
+
+

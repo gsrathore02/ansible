@@ -1,0 +1,15 @@
+web_server:
+  hosts: 192.168.2.57
+  tasks:
+  vars:
+    domain: helloworld.com
+    project: helloworld
+    ansible_user: root
+  #    application_user: gulab
+  #    mysql_host: localhost
+  #    mysql_database: gulab
+  #    mysql_root_user: root
+  #    mysql_root_password: root@123
+  #    mysql_user: gulab
+  #    mysql_passwd: gulab@321
+
