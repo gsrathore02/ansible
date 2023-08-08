@@ -25,6 +25,7 @@
   template:
     src: templates/www.conf.j2
     dest: /etc/php/7.4/fpm/pool.d/{{ project }}.conf
+    login_unix_socket: /var/run/php/php7.4-fpm.sock
     owner: root
     group: root
     mode: '0644'
